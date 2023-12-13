@@ -98,13 +98,6 @@ class Player {
         }
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
-        // Сенсорная стрельба
-        if (this.game.tShot && !this.game.fired){
-            this.shoot();
-            this.game.fired = true;
-            this.frameX = 1;
-        }
-
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
@@ -426,6 +419,14 @@ class Game {
         this.spriteTimer = 0;
         this.spriteInterval = 150;
 
+        this.shootUpdate = false;
+        this.shootTimer = 0;
+        this.shootInterval = 1000;
+
+        this.laserUpdate = false;
+        this.laserTimer = 0;
+        this.laserInterval = 4000;
+
         this.score = 0;
         this.gameOver = false;
 
@@ -462,9 +463,13 @@ class Game {
         event.preventDefault();
 
         this.tStartX = event.touches[0].clientX;
+        this.tShot = event.touches[1].clientX;
 
-        if (event.touches[1].clientX){
-            this.tShot = true;
+        // Сенсорная стрельба
+        if (this.tShot && !this.fired){
+            this.fired = true;
+            this.player.shoot();
+            this.player.frameX = 1;
         }
     }
     handleTouchMove(event) {
@@ -476,11 +481,11 @@ class Game {
     handleTouchEnd(event) {
         event.preventDefault();
 
-        this.tStartX = null;
-        this.tMoveX = null;
-
-        if (!event.touches[1].clientX){
-            this.tShot = false;
+        if (event.changedTouches[0]){
+            this.tStartX = null;
+            this.tMoveX = null;
+        }
+        if (event.changedTouches[1]){
             this.fired = false
         }
     }
@@ -497,7 +502,21 @@ class Game {
         }
 
         // Тайминг стрельбы
+        if (this.shootTimer > this.shootInterval){
+            this.shootUpdate = true;
+            this.shootTimer = 0;
+        } else {
+            this.shootUpdate = false;
+            this.shootTimer += deltaTime;
+        }
 
+        if (this.laserTimer > this.laserInterval){
+            this.laserUpdate = true;
+            this.laserTimer = 0;
+        } else {
+            this.laserUpdate = false;
+            this.laserTimer += deltaTime;
+        }
 
         this.drawStatusText(context);
         this.projectilesPool.forEach(projectile => {
