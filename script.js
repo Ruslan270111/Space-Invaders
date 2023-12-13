@@ -98,6 +98,13 @@ class Player {
         }
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
+        // Сенсорная стрельба
+        if (this.game.tShot){
+            this.shoot();
+            this.game.fired = true;
+            this.frameX = 1;
+        }
+
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
@@ -124,10 +131,10 @@ class Player {
 
         // Сенсорное перемещение
         if (this.game.tStartX){
-            if (this.game.tStartX < this.x && this.game.tStartX + 4 < this.x){
+            if (this.game.tStartX < this.x + this.width * 0.5 && this.game.tStartX + 4 < this.x + this.width * 0.5){
                 this.x -=this.speed;
                 this.jetsFrame = 0;
-            } else if (this.game.tStartX > this.x && this.game.tStartX + 4 > this.x){
+            } else if (this.game.tStartX > this.x + this.width * 0.5 && this.game.tStartX + 4 > this.x + this.width * 0.5){
                 this.x +=this.speed;
                 this.jetsFrame = 2;
             } else {
@@ -135,10 +142,10 @@ class Player {
             }
         }
         if (this.game.tMoveX){
-            if (this.game.tMoveX < this.x && this.game.tMoveX + 4 < this.x){
+            if (this.game.tMoveX < this.x + this.width * 0.5 && this.game.tMoveX + 4 < this.x + this.width * 0.5){
                 this.x -=this.speed;
                 this.jetsFrame = 0;
-            } else if (this.game.tMoveX > this.x && this.game.tMoveX + 4 > this.x){
+            } else if (this.game.tMoveX > this.x + this.width * 0.5 && this.game.tMoveX + 4 > this.x + this.width * 0.5){
                 this.x +=this.speed;
                 this.jetsFrame = 2;
             } else {
@@ -428,6 +435,9 @@ class Game {
 
         this.tStartX;
         this.tMoveX;
+        this.tShot;
+        this.tLaser;
+        this.tBigLaser
 
         // Обработчики сенсора его переменные
         canvas.addEventListener('touchstart', (event) => this.handleTouchStart(event));
@@ -452,6 +462,10 @@ class Game {
         event.preventDefault();
 
         this.tStartX = event.touches[0].clientX;
+
+        if (event.touches[1].clientX){
+            this.tShot = true;
+        }
     }
     handleTouchMove(event) {
         event.preventDefault();
@@ -464,6 +478,10 @@ class Game {
 
         this.tStartX = null;
         this.tMoveX = null;
+
+        if (!event.touches[1].clientX){
+            this.tShot = false;
+        }
     }
     
         
@@ -476,6 +494,9 @@ class Game {
             this.spriteUpdate = false;
             this.spriteTimer += deltaTime;
         }
+
+        // Тайминг стрельбы
+
 
         this.drawStatusText(context);
         this.projectilesPool.forEach(projectile => {
@@ -586,6 +607,7 @@ window.addEventListener('load', function(){
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    // Разработано на таком разрешении:
     //canvas.width = 600;
     //canvas.height = 800;
     ctx.fillStyle = 'white';
@@ -598,7 +620,6 @@ window.addEventListener('load', function(){
     function animate(timeStamp){
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
-        game.aspectRatio = game.width / game.height; // Проверить
         ctx.clearRect(0, 0 , canvas.width, canvas.height);
         game.render(ctx, deltaTime);
         window.requestAnimationFrame(animate);
