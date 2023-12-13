@@ -98,6 +98,13 @@ class Player {
         }
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
+        // Сенсорный лазер
+        if (this.game.shootUpdate){
+            this.smallLaser.render(context);
+        } else if (this.game.shootUpdate){
+            this.bigLaser.render(context);
+        }
+
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
@@ -471,15 +478,7 @@ class Game {
             this.player.shoot();
             this.player.frameX = 1;
         }
-
-        // Тайминг стрельбы
-        if (this.shootTimer > this.shootInterval){
-            this.shootUpdate = true;
-            this.shootTimer = 0;
-        } else {
-            this.shootUpdate = false;
-            this.shootTimer += deltaTime;
-        }
+        
     }
     handleTouchMove(event) {
         event.preventDefault();
@@ -497,6 +496,9 @@ class Game {
         if (event.changedTouches[1]){
             this.fired = false
             this.player.frameX = 0;
+            this.shootTimer = 0;
+            this.shootUpdate = false;
+            this.shootUpdate = false;
         }
     }
     
@@ -509,6 +511,21 @@ class Game {
         } else {
             this.spriteUpdate = false;
             this.spriteTimer += deltaTime;
+        }
+
+        // Тайминг стрельбы
+        if (this.shootTimer > this.shootInterval && this.tStartX){
+            this.shootUpdate = true;
+            this.shootTimer = 0;
+        } else {
+            this.shootTimer += deltaTime;
+        }
+
+        if (this.laserTimer > this.laserInterval && this.tStartX){
+            this.shootUpdate = true;
+            this.laserTimer = 0;
+        } else {
+            this.laserTimer += deltaTime;
         }
 
         this.drawStatusText(context);
