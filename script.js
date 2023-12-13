@@ -89,9 +89,9 @@ class Player {
             this.shoot();
             this.game.fired = true;
             this.frameX = 1;
-        }else if (this.game.keys.indexOf('Control') > -1) {
+        }else if (this.game.keys.indexOf('Control') > -1 || this.game.shootUpdate) {
             this.smallLaser.render(context);
-        } else if (this.game.keys.indexOf('Shift') > -1) {
+        } else if (this.game.keys.indexOf('Shift') > -1 || this.game.shootUpdate) {
             this.bigLaser.render(context);
         } else {
             this.frameX = 0;
@@ -471,6 +471,15 @@ class Game {
             this.player.shoot();
             this.player.frameX = 1;
         }
+
+        // Тайминг стрельбы
+        if (this.shootTimer > this.shootInterval){
+            this.shootUpdate = true;
+            this.shootTimer = 0;
+        } else {
+            this.shootUpdate = false;
+            this.shootTimer += deltaTime;
+        }
     }
     handleTouchMove(event) {
         event.preventDefault();
@@ -487,6 +496,7 @@ class Game {
         }
         if (event.changedTouches[1]){
             this.fired = false
+            this.player.frameX = 0;
         }
     }
     
@@ -499,23 +509,6 @@ class Game {
         } else {
             this.spriteUpdate = false;
             this.spriteTimer += deltaTime;
-        }
-
-        // Тайминг стрельбы
-        if (this.shootTimer > this.shootInterval){
-            this.shootUpdate = true;
-            this.shootTimer = 0;
-        } else {
-            this.shootUpdate = false;
-            this.shootTimer += deltaTime;
-        }
-
-        if (this.laserTimer > this.laserInterval){
-            this.laserUpdate = true;
-            this.laserTimer = 0;
-        } else {
-            this.laserUpdate = false;
-            this.laserTimer += deltaTime;
         }
 
         this.drawStatusText(context);
