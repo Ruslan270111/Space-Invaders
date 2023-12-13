@@ -98,13 +98,6 @@ class Player {
         }
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
-        // Сенсорный лазер
-        if (this.game.shootUpdate){
-            this.smallLaser.render(context);
-        } else if (this.game.shootUpdate){
-            this.bigLaser.render(context);
-        }
-
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
@@ -514,15 +507,15 @@ class Game {
         }
 
         // Тайминг стрельбы
-        if (this.shootTimer > this.shootInterval && this.tStartX){
+        if (this.shootTimer > this.shootInterval && this.tShot){
             this.shootUpdate = true;
             this.shootTimer = 0;
         } else {
             this.shootTimer += deltaTime;
         }
 
-        if (this.laserTimer > this.laserInterval && this.tStartX){
-            this.shootUpdate = true;
+        if (this.laserTimer > this.laserInterval && this.tShot){
+            this.laserUpdate = true;
             this.laserTimer = 0;
         } else {
             this.laserTimer += deltaTime;
