@@ -89,14 +89,19 @@ class Player {
             this.shoot();
             this.game.fired = true;
             this.frameX = 1;
-        }else if (this.game.keys.indexOf('Control') > -1 || this.game.shootUpdate) {
+        }else if (this.game.keys.indexOf('Control') > -1) {
             this.smallLaser.render(context);
-        } else if (this.game.keys.indexOf('Shift') > -1 || this.game.shootUpdate) {
+        } else if (this.game.keys.indexOf('Shift') > -1) {
             this.bigLaser.render(context);
         } else {
             this.frameX = 0;
         }
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
+
+        // Сенсорная стрельба
+        if (this.game.shootUpdate) {
+            this.smallLaser.render(context);
+        }
 
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -482,17 +487,13 @@ class Game {
     handleTouchEnd(event) {
         event.preventDefault();
 
-        if (event.changedTouches[0]){
-            this.tStartX = null;
-            this.tMoveX = null;
-        }
-        if (event.changedTouches[1]){
-            this.fired = false
-            this.player.frameX = 0;
-            this.shootTimer = 0;
-            this.shootUpdate = false;
-            this.shootUpdate = false;
-        }
+        //if (event.changedTouches[0])
+        this.tStartX = null;
+        this.tMoveX = null;
+        this.fired = false
+        this.player.frameX = 0;
+        this.shootTimer = 0;
+        this.shootUpdate = false;
     }
     
         
