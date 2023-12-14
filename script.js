@@ -99,8 +99,10 @@ class Player {
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
         // Сенсорная стрельба
-        if (this.game.shootUpdate) {
+        if (this.game.shootUpdate && this.player.tShot) {
             this.smallLaser.render(context);
+        } else if (this.game.laserUpdate && this.player.tShot){
+            this.bigLaser.render(context);
         }
 
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -488,12 +490,12 @@ class Game {
         event.preventDefault();
 
         //if (event.changedTouches[0])
-        this.tStartX = null;
-        this.tMoveX = null;
         this.fired = false
         this.player.frameX = 0;
         this.shootTimer = 0;
         this.shootUpdate = false;
+        this.laserTimer = 0;
+        this.laserUpdate = false;
     }
     
         
