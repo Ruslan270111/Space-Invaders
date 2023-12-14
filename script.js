@@ -513,12 +513,12 @@ class Game {
             this.shootTimer += deltaTime;
         }
 
-        if (this.laserTimer > this.laserInterval && this.tShot){
-            this.laserUpdate = true;
-            this.laserTimer = 0;
-        } else if (this.tShot){
-            this.laserTimer += deltaTime;
-        }
+        //if (this.laserTimer > this.laserInterval && this.tShot){
+        //    this.laserUpdate = true;
+        //    this.laserTimer = 0;
+        //} else if (this.tShot){
+        //    this.laserTimer += deltaTime;
+        //}
 
         this.drawStatusText(context);
         this.projectilesPool.forEach(projectile => {
