@@ -101,8 +101,6 @@ class Player {
         // Сенсорная стрельба
         if (this.game.shootUpdate && this.player.tShot) {
             this.smallLaser.render(context);
-        } else if (this.game.laserUpdate && this.player.tShot){
-            this.bigLaser.render(context);
         }
 
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
