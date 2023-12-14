@@ -444,8 +444,6 @@ class Game {
         this.tStartX;
         this.tMoveX;
         this.tShot;
-        this.tLaser;
-        this.tBigLaser
 
         // Обработчики сенсора его переменные
         canvas.addEventListener('touchstart', (event) => this.handleTouchStart(event));
@@ -513,14 +511,14 @@ class Game {
         if (this.shootTimer > this.shootInterval && this.tShot){
             this.shootUpdate = true;
             this.shootTimer = 0;
-        } else {
+        } else if (this.tShot){
             this.shootTimer += deltaTime;
         }
 
         if (this.laserTimer > this.laserInterval && this.tShot){
             this.laserUpdate = true;
             this.laserTimer = 0;
-        } else {
+        } else if (this.tShot){
             this.laserTimer += deltaTime;
         }
 
