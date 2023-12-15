@@ -101,6 +101,9 @@ class Player {
         // Сенсорная стрельба
         if (this.game.shootUpdate && this.game.tShot) {
             this.smallLaser.render(context);
+        } else if (this.game.laserUpdate && this.game.tShot) {
+            this.game.shootUpdate = false;
+            this.bigLaser.render(context);
         }
 
         context.drawImage(this.jets_image, this.jetsFrame * this.width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -513,12 +516,12 @@ class Game {
             this.shootTimer += deltaTime;
         }
 
-        //if (this.laserTimer > this.laserInterval && this.tShot){
-        //    this.laserUpdate = true;
-        //    this.laserTimer = 0;
-        //} else if (this.tShot){
-        //    this.laserTimer += deltaTime;
-        //}
+        if (this.laserTimer > this.laserInterval && this.tShot){
+            this.laserUpdate = true;
+            this.laserTimer = 0;
+        } else if (this.tShot){
+            this.laserTimer += deltaTime;
+        }
 
         this.drawStatusText(context);
         this.projectilesPool.forEach(projectile => {
