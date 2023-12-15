@@ -99,7 +99,7 @@ class Player {
         if (this.game.keys.indexOf(' ') == -1) this.game.fired = false;
 
         // Сенсорная стрельба
-        if (this.game.shootUpdate && this.player.tShot) {
+        if (this.game.shootUpdate && this.game.tShot) {
             this.smallLaser.render(context);
         }
 
