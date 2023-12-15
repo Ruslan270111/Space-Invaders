@@ -101,7 +101,8 @@ class Player {
         // Сенсорная стрельба
         if (this.game.shootUpdate && this.game.tShot) {
             this.smallLaser.render(context);
-        } else if (this.game.laserUpdate && this.game.tShot) {
+        }
+        if (this.game.laserUpdate && this.game.tShot) {
             this.game.shootUpdate = false;
             this.bigLaser.render(context);
         }
@@ -153,7 +154,6 @@ class Player {
                 this.jetsFrame = 1;
             }
         }
-        console.log(this.game.width, this.game.height);
 
         // Рестарт
         if (this.game.keys.indexOf('Escape') > -1) this.game.restart();
